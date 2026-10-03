@@ -1,0 +1,67 @@
+{
+  "dataset": "EuroSAT",
+  "zenodo_record": "7711810",
+  "release": "v2",
+  "source": "https://zenodo.org/records/7711810",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "pandas": "3.0.1",
+    "matplotlib": "3.11.2",
+    "Pillow": "12.3.0",
+    "rasterio": "1.5.2",
+    "shapely": "2.1.2",
+    "pyshp": "3.1.6"
+  },
+  "boundary_source": "Natural Earth Admin 0 Countries 1:10m v5.1.1",
+  "boundary_url": "https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_0_countries.zip",
+  "boundary_shp_sha256": "7ce119ef6342e43cff7c0c3004e0911ab7ec1988a14734372031d2012180e7bc",
+  "country_region_mapping": {
+    "Western": [
+      "FRA",
+      "BEL",
+      "NLD",
+      "LUX",
+      "GBR",
+      "IRL",
+      "MCO"
+    ],
+    "Central": [
+      "DEU",
+      "AUT",
+      "CHE",
+      "LIE",
+      "POL",
+      "CZE",
+      "SVK",
+      "HUN",
+      "SVN"
+    ],
+    "Southern": [
+      "ESP",
+      "PRT",
+      "ITA",
+      "SMR",
+      "VAT",
+      "MLT",
+      "GRC",
+      "ALB",
+      "MKD",
+      "HRV",
+      "BIH",
+      "MNE",
+      "SRB",
+      "KOS",
+      "CYP"
+    ],
+    "Eastern": [
+      "ROU",
+      "BGR",
+      "MDA",
+      "UKR",
+      "BLR",
+      "RUS"
+    ]
+  },
+  "note": "Region coverage is preliminary; no final split, learned preprocessing or model evaluation."
+}
