@@ -33,7 +33,6 @@ def main():
         stratify=development["class"],
     )
 
-    # Dummy features are sufficient: this model predicts one class only.
     X_train = np.zeros((len(train), 1))
     model = DummyClassifier(strategy="most_frequent")
     model.fit(X_train, train["class"])

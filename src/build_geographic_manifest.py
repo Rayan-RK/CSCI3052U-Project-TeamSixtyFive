@@ -20,8 +20,6 @@ BOUNDARY_FILE = (
 )
 OUTPUT_FILE = ROOT / "outputs" / "geographic_manifest_rebuilt.csv"
 
-# Samples within this distance of a country boundary or coastline
-# are flagged for review rather than automatically assigned.
 BOUNDARY_BUFFER_KM = 1.0
 
 COUNTRY_REGIONS = {
@@ -85,7 +83,6 @@ def main():
 
     tree = STRtree(geometries)
 
-    # EPSG:3035 provides metric distances suitable for Europe.
     project = Transformer.from_crs(
         "EPSG:4326", "EPSG:3035", always_xy=True
     )
@@ -130,7 +127,7 @@ def main():
             point_within_country = False
 
         elif len(matches) > 1:
-            # Overlapping country polygons require manual review.
+  
             mapping_status = "border_or_coast_review"
             partition = "unresolved"
             point_within_country = True
@@ -210,7 +207,6 @@ def main():
 
     print(f"\nSaved new manifest to:\n{OUTPUT_FILE}")
 
-    # Compare with the existing preliminary manifest, if available.
     old_file = ROOT / "outputs" / "preliminary_region_manifest.csv"
 
     if old_file.exists():
