@@ -1,0 +1,3 @@
+model,partition,n_samples,accuracy,macro_f1
+Majority-class baseline,development_validation,3516,0.13594994311717862,0.023935903855783675
+Majority-class baseline,ood_test,6231,0.09131760552078318,0.01673529411764706

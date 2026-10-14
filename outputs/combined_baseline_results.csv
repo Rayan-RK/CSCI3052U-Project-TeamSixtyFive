@@ -1,0 +1,5 @@
+model,partition,n_samples,accuracy,macro_f1
+Majority-class baseline,development_validation,3516,0.1359499431171786,0.0239359038557836
+Majority-class baseline,ood_test,6231,0.0913176055207831,0.016735294117647
+PCA + Random Forest (RGB),development_validation,3516,0.7084755403868032,0.6910487683196636
+PCA + Random Forest (RGB),ood_test,6231,0.4485636334456748,0.4364510465773787

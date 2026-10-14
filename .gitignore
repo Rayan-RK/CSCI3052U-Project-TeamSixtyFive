@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Raw datasets and downloaded archives
+data/
+
+# Python virtual environments
+.venv/
+venv/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
