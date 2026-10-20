@@ -6,3 +6,7 @@ pandas
 matplotlib
 rasterio
 albumentations
+Pillow
+pyshp
+shapely
+pyproj
