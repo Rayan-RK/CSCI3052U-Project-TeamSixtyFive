@@ -59,9 +59,13 @@ def main():
     X_dev, y_dev = X[dev_mask], y[dev_mask]
     X_ood, y_ood = X[ood_mask], y[ood_mask]
 
-    X_train, X_val, y_train, y_val = train_test_split(
+    ids_dev = data.loc[dev_mask, "sample_id"].to_numpy()
+    ids_ood = data.loc[ood_mask, "sample_id"].to_numpy()
+
+    X_train, X_val, y_train, y_val, ids_train, ids_val = train_test_split(
         X_dev,
         y_dev,
+        ids_dev,
         test_size=0.2,
         random_state=RANDOM_SEED,
         stratify=y_dev,
@@ -87,13 +91,28 @@ def main():
 
     results = []
     class_results = []
+    predictions_list = []
 
-    for name, X_eval, y_eval in [
-        ("development_validation", X_val, y_val),
-        ("ood_test", X_ood, y_ood),
+    
+    for name, X_eval, y_eval, ids_eval in [
+        ("development_validation", X_val, y_val, ids_val),
+        ("ood_test", X_ood, y_ood, ids_ood),
     ]:
         predictions = model.predict(X_eval)
 
+        # Save individual predictions
+        for sample_id, actual, predicted in zip(
+            ids_eval, y_eval, predictions
+        ):
+            predictions_list.append({
+                "sample_id": sample_id,
+                "partition": name,
+                "true_class": actual,
+                "predicted_class": predicted,
+                "correct": actual == predicted,
+            })
+
+        # Calculate overall metrics once per partition
         results.append({
             "model": "PCA + Random Forest (RGB)",
             "partition": name,
@@ -104,6 +123,7 @@ def main():
             ),
         })
 
+        # Calculate per-class metrics
         report = classification_report(
             y_eval,
             predictions,
@@ -124,14 +144,21 @@ def main():
                 "f1": metrics["f1-score"],
             })
 
+    # Save overall results
     results_df = pd.DataFrame(results)
     results_df.to_csv(output_path, index=False)
 
+    # Save per-class results
     class_output_path = (
         project_root / "outputs" / "rgb_per_class_results.csv"
     )
     class_results_df = pd.DataFrame(class_results)
     class_results_df.to_csv(class_output_path, index=False)
+
+    # Save individual predictions
+    predictions_df = pd.DataFrame(predictions_list)
+    predictions_path = project_root / "outputs" / "rgb_predictions.csv"
+    predictions_df.to_csv(predictions_path, index=False)
 
     print("\nOverall results:")
     print(results_df.to_string(index=False))
@@ -141,6 +168,7 @@ def main():
 
     print(f"\nSaved overall results to: {output_path}")
     print(f"Saved per-class results to: {class_output_path}")
+    print(f"Saved predictions to: {predictions_path}")
 
 
 
