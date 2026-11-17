@@ -1,0 +1,6 @@
+run_id,variant,ood_macro_f1,delta_vs_full
+E027,"Full ResNet-18 (64x64, Pretrained, Aug, Weighted)",0.8599,0.0
+E044,w/o Data Augmentation,0.8586,-0.0013
+E045,w/o Class-Weighted Loss,0.8533,-0.0066
+E046,w/o ImageNet Pretraining (Random Init),0.712,-0.1479
+E047,Downsampled Input (16x16 Resolution),0.6072,-0.2527

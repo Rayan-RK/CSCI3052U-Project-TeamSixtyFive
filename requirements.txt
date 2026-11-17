@@ -10,3 +10,7 @@ Pillow
 pyshp
 shapely
 pyproj
+scipy
+matplotlib
+torch
+torchvision

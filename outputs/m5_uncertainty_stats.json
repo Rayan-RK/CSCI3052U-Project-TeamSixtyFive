@@ -1,0 +1,8 @@
+{
+  "wilcoxon_resnet_vs_rf_p": 0.0625,
+  "wilcoxon_resnet_vs_majority_p": 0.0625,
+  "resnet_seed42_ood_bootstrap_95ci": [
+    0.8469976450405965,
+    0.8723940798669749
+  ]
+}

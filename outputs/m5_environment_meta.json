@@ -1,0 +1,16 @@
+{
+  "python": "3.11.9",
+  "os": "Windows-10-10.0.26300-SP0",
+  "torch": "2.6.0+cu124",
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 2060 SUPER",
+  "git_commit": "0668fe9",
+  "seeds": [
+    42,
+    100,
+    2026,
+    777,
+    999
+  ],
+  "split_seed": 42
+}

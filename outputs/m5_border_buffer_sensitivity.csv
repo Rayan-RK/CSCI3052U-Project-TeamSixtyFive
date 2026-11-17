@@ -1,0 +1,5 @@
+border_buffer_km,n_ood_samples,resnet_ood_macro_f1
+0.0,6231,0.8599
+2.0,6041,0.8596
+5.0,5435,0.8596
+10.0,4501,0.8635

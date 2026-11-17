@@ -1,0 +1,11 @@
+class,dev_val_f1,ood_test_f1,f1_drop,ood_support
+Pasture,0.9838,0.5263,0.4575,54
+PermanentCrop,0.9892,0.7716,0.2176,1083
+River,0.9839,0.8152,0.1687,205
+HerbaceousVegetation,0.9912,0.8452,0.146,1414
+AnnualCrop,0.9885,0.9014,0.0871,569
+Industrial,0.9927,0.9085,0.0842,564
+Forest,0.9988,0.9465,0.0523,770
+Highway,0.985,0.9446,0.0405,492
+Residential,0.9934,0.9585,0.0348,682
+SeaLake,0.9981,0.9811,0.017,398

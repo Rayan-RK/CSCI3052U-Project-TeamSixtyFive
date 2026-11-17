@@ -1,100 +1,88 @@
-# Out-of-Distribution Generalization in Satellite Land Cover Classification
+﻿# Out-of-Distribution Generalization in Satellite Land Cover Classification
 
 **Course:** CSCI 3052U — Machine Learning I  
 **Team:** SixtyFive.AI
 
 ## Project Overview
 
-This project investigates how geographic domain shift affects satellite image classification using the EuroSAT Sentinel-2 dataset. We compare model performance on a development validation set and a geographically separated out-of-distribution (OOD) test set.
+This project investigates how geographic domain shift affects satellite image classification using the EuroSAT Sentinel-2 dataset. We train models exclusively on scenes from Northern, Western, and Central Europe (**Development**, $N = 17,580$) and evaluate them on a geographically separated **Out-of-Distribution (OOD) Test** set ($N = 6,231$) covering Southern and Eastern Europe.
 
-Our primary evaluation metric is **Macro-F1**, which gives equal weight to each land-cover class.
+Our primary evaluation metric is **Macro-F1**, which gives equal weight to each land-cover class despite regional class-frequency shifts.
 
 ## Dataset
 
-We use the official EuroSAT v2 dataset, containing 27,000 RGB images and 27,000 multispectral images across 10 land-cover classes.
+We use the official EuroSAT v2 dataset, containing 27,000 RGB images across 10 land-cover classes (3,189 patches without valid coordinates are excluded during geographic partitioning).
 
 - Official dataset: https://zenodo.org/records/7711810
 - RGB images: `data/EuroSAT_RGB/EuroSAT_RGB/`
-- Multispectral images: `data/EuroSAT_MS/EuroSAT_MS/`
 
-Raw datasets are not included in this repository because of their size. Download the official archives and extract them into the corresponding directories above.
+Raw datasets are excluded from Git due to repository size limits. Note that `src/run_milestone5.py` will also download and extract `EuroSAT_RGB` automatically if it is not already present locally.
 
 ## Repository Structure
 
 - `notebooks/` — Exploratory data analysis and dataset inspection.
-- `src/` — Scripts for geographic manifest generation, baseline training, and result aggregation.
-- `outputs/` — Generated metadata, geographic manifests, evaluation results, and figures.
-- `reports/` — Project proposals, team documentation, and milestone reports.
+- `src/` — Scripts for geographic manifest generation, baseline training, Milestone 5 ResNet-18 evaluation, and result aggregation.
+- `outputs/` — Generated metadata, geographic manifests, Milestone 5 metric tables, experiment logs, and 300 DPI figures.
+- `reports/` — Project proposals, progress memos, and the Milestone 5 experimental results report (`reports/milestone5_results.md`).
 - `requirements.txt` — Python dependencies.
 
 ## Environment Setup
 
 Use Python 3.11 or another compatible Python version. From the repository root, install the dependencies:
 
-```bash
-python -m pip install -r requirements.txt
-```
+    python -m pip install -r requirements.txt
 
-The project uses Python libraries including NumPy, pandas, Pillow, scikit-learn, Rasterio, Shapely, PyProj, and PyShp.
+The project uses NumPy, pandas, Pillow, scikit-learn, SciPy, PyTorch, torchvision, Matplotlib, Rasterio, Shapely, PyProj, and PyShp.
 
 ## Data Preparation
 
-1. Download and extract the official EuroSAT v2 RGB and multispectral archives into the directories specified above.
-2. Obtain the Natural Earth Admin 0 Countries 1:10m boundary dataset and extract its shapefile components into:
-
-   `data/natural_earth/ne_10m_admin_0_countries/`
-
-3. Run all cells in `notebooks/01_eda_eurosat.ipynb` to inspect the dataset and generate the metadata artifacts required by the geographic pipeline.
+1. Download and extract the official EuroSAT v2 RGB archive into `data/EuroSAT_RGB/EuroSAT_RGB/`.
+2. Obtain the Natural Earth Admin 0 Countries 1:10m boundary dataset and extract its shapefile components into `data/natural_earth/ne_10m_admin_0_countries/`.
+3. Run `notebooks/01_eda_eurosat.ipynb` to inspect the dataset and generate the initial metadata artifacts.
 4. From the repository root, build the geographic manifest:
 
-```bash
-python src/build_geographic_manifest.py
-```
+    python src/build_geographic_manifest.py
 
-This generates `outputs/geographic_manifest_rebuilt.csv`. The script uses sample coordinates and country boundaries to assign candidate partitions. Samples within 1 km of a country boundary are flagged for review, and unmatched samples remain unresolved.
+This generates `outputs/geographic_manifest_rebuilt.csv`, assigning patches to `development` or `ood_test` partitions and computing distances to national boundaries.
 
-The geographic assignments are provisional and should be validated before final scientific conclusions are drawn.
+## Running the Experiments
 
-## Baseline Experiments
+### Milestone 5 Full Pipeline (Tuning, 5-Seed Evaluation, Error Analysis, Robustness & Ablations)
 
-Run the majority-class baseline:
+Run the end-to-end Milestone 5 pipeline from the repository root:
 
-```bash
-python src/baseline.py
-```
+    python -u src/run_milestone5.py
 
-Run the RGB PCA + Random Forest baseline:
+This script performs:
+1. **Validation-Only Hyperparameter Tuning:** 12 random grid trials each for PCA + Random Forest and ResNet-18 (`Run IDs E001–E024`).
+2. **5-Seed Evaluation (`seeds = 42, 100, 2026, 777, 999`):** Trains and evaluates the Majority-Class baseline, tuned PCA + Random Forest, and tuned ResNet-18 (`Run IDs E025–E039`), computing 95% confidence intervals, Wilcoxon signed-rank tests, and bootstrap CIs.
+3. **Error Analysis & Confusion Matrices:** Exports per-class $F_1$ drops and the top 50 highest-confidence OOD errors.
+4. **Sensitivity, Robustness & Ablation Studies:** Evaluates learning-rate sensitivity, $0\text{–}10\text{ km}$ border-buffer sensitivity, Gaussian noise and brightness/contrast perturbations, and component ablations (`Run IDs E040–E047`).
 
-```bash
-python src/run_rgb_baseline.py
-```
+### Earlier Milestone Baselines
 
-Combine the summary results:
+    python src/baseline.py
+    python src/run_rgb_baseline.py
+    python src/combine_results.py
 
-```bash
-python src/combine_results.py
-```
+## Milestone 5 Results Summary (5 Seeds)
 
-The RGB baseline resizes images to 16 × 16 pixels, applies PCA with 100 components, and trains a Random Forest with 200 trees. The development data is divided into training and validation subsets using an 80/20 stratified split and random seed 42.
+All models were tuned on Development Validation ($n = 3,516$) and evaluated across 5 random seeds on Geographic OOD Test ($N = 6,231$). Full tables, figures, and the 47-run experiment log are documented in [`reports/milestone5_results.md`](reports/milestone5_results.md).
 
-## Current Preliminary Results
+| Model | Dev Val Accuracy | Dev Val Macro-F1 | Geographic OOD Accuracy | Geographic OOD Macro-F1 |
+|---|---:|---:|---:|---:|
+| Majority-Class Baseline | 0.1359 ± 0.0000 | 0.0239 ± 0.0000 | 0.0913 ± 0.0000 | 0.0167 ± 0.0000 |
+| PCA + Random Forest (400 trees) | 0.7157 ± 0.0028 | 0.6997 ± 0.0027 | 0.4481 ± 0.0022 | 0.4374 ± 0.0024 |
+| **ResNet-18 (Proposed, 64×64)** | **0.9902 ± 0.0008** | **0.9903 ± 0.0008** | **0.8809 ± 0.0046** | **0.8561 ± 0.0054** |
 
-| Model | Partition | Accuracy | Macro-F1 |
-|---|---|---:|---:|
-| Majority-class baseline | Development validation | 0.1360 | 0.0239 |
-| Majority-class baseline | OOD test | 0.0913 | 0.0167 |
-| PCA + Random Forest (RGB) | Development validation | 0.7085 | 0.6910 |
-| PCA + Random Forest (RGB) | OOD test | 0.4486 | 0.4365 |
+### Key Takeaways
 
-The RGB baseline shows a preliminary Macro-F1 decrease of approximately 0.255 between development validation and OOD test. Per-class results are available in `outputs/rgb_per_class_results.csv`, with F1-gap analysis in `outputs/rgb_f1_gap_analysis.csv`.
-
-These results are preliminary. Differences in geographic coverage and class distributions may contribute to the observed performance gap.
+- **Substantial OOD Improvement:** Fine-tuned ResNet-18 achieves **0.8561 ± 0.0054** Macro-F1 on unseen Southern and Eastern European regions, nearly doubling the PCA + Random Forest baseline (**0.4374 ± 0.0024**) and cutting the relative geographic generalization drop from **37.5%** down to **13.6%**.
+- **Primary Drivers of Generalization:** Ablation studies (`outputs/m5_ablation.csv`) show that preserving native $64 \times 64$ spatial resolution (**+0.2527** OOD Macro-F1 over $16 \times 16$) and ImageNet pretraining (**+0.1479** over random initialization) account for the largest gains.
+- **Error Modes & Border Robustness:** OOD errors concentrate in climatically sensitive agricultural and riparian classes (`Pasture`, `PermanentCrop`, `River`) in Mediterranean regions, while border-buffer checks ($0\text{–}10\text{ km}$) confirm OOD accuracy remains stable (**0.8599** to **0.8635**) well inside country interiors.
 
 ## Reproducibility and Limitations
 
-- The experiments use a fixed random seed for the development train/validation split and model initialization.
-- The geographic manifest is generated from sample coordinates and Natural Earth country boundaries.
-- Boundary screening, unresolved samples, and class imbalance may affect the evaluation.
-- Raw datasets and other large files are excluded from Git.
-- Results should be regenerated after changes to the dataset, geographic assignments, dependencies, or model configuration.
-
+- All experiments use fixed seeds (`SPLIT_SEED = 42`, evaluation seeds `[42, 100, 2026, 777, 999]`) and log environment metadata in `outputs/m5_environment_meta.json`.
+- Raw datasets and local model checkpoints are excluded from Git via `.gitignore`.
+- Severe OOD class scarcity (e.g., `Pasture` having $n = 54$ OOD samples) and sensitivity to additive sensor noise remain key limitations for future work.

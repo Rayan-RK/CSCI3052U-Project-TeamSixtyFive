@@ -1,0 +1,4 @@
+condition,rf_ood_macro_f1,resnet_ood_macro_f1
+Clean OOD,0.4349,0.8599
+Gaussian Noise (sigma=0.08),0.2979,0.4885
+Brightness/Contrast Shift,0.139,0.6661

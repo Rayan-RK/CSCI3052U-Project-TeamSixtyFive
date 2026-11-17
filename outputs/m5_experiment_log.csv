@@ -1,0 +1,48 @@
+run_id,date,model,hyperparameters,seed,split,val_macro_f1,ood_test_macro_f1,runtime_min,observations
+E001,2026-11-17,PCA + Random Forest,"pca=100, n_trees=100, max_depth=25, max_feat=log2",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6476,,0.03,RF tuning trial
+E002,2026-11-17,PCA + Random Forest,"pca=100, n_trees=100, max_depth=15, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.677,,0.03,RF tuning trial
+E003,2026-11-17,PCA + Random Forest,"pca=100, n_trees=200, max_depth=25, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6866,,0.06,RF tuning trial
+E004,2026-11-17,PCA + Random Forest,"pca=100, n_trees=400, max_depth=None, max_feat=log2",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6813,,0.08,RF tuning trial
+E005,2026-11-17,PCA + Random Forest,"pca=100, n_trees=400, max_depth=25, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6961,,0.12,RF tuning trial
+E006,2026-11-17,PCA + Random Forest,"pca=100, n_trees=100, max_depth=25, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6798,,0.04,RF tuning trial
+E007,2026-11-17,PCA + Random Forest,"pca=100, n_trees=200, max_depth=None, max_feat=log2",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6758,,0.05,RF tuning trial
+E008,2026-11-17,PCA + Random Forest,"pca=100, n_trees=100, max_depth=15, max_feat=log2",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6468,,0.02,RF tuning trial
+E009,2026-11-17,PCA + Random Forest,"pca=100, n_trees=400, max_depth=25, max_feat=log2",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6706,,0.08,RF tuning trial
+E010,2026-11-17,PCA + Random Forest,"pca=100, n_trees=200, max_depth=None, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.6923,,0.06,RF tuning trial
+E011,2026-11-17,PCA + Random Forest,"pca=100, n_trees=200, max_depth=15, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.691,,0.06,RF tuning trial
+E012,2026-11-17,PCA + Random Forest,"pca=100, n_trees=400, max_depth=None, max_feat=sqrt",42,Dev 80/20 (seed 42) vs Geographic OOD,0.7024,,0.12,RF tuning trial
+E013,2026-11-17,ResNet-18 (Proposed),"lr=0.0001, bs=32, wd=1e-05, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9854,,3.33,ResNet-18 tuning trial
+E014,2026-11-17,ResNet-18 (Proposed),"lr=0.0001, bs=32, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9838,,2.9,ResNet-18 tuning trial
+E015,2026-11-17,ResNet-18 (Proposed),"lr=0.0001, bs=64, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9843,,2.4,ResNet-18 tuning trial
+E016,2026-11-17,ResNet-18 (Proposed),"lr=0.003, bs=32, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9762,,2.86,ResNet-18 tuning trial
+E017,2026-11-17,ResNet-18 (Proposed),"lr=0.001, bs=32, wd=1e-05, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9814,,2.9,ResNet-18 tuning trial
+E018,2026-11-17,ResNet-18 (Proposed),"lr=0.001, bs=32, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9829,,3.04,ResNet-18 tuning trial
+E019,2026-11-17,ResNet-18 (Proposed),"lr=0.003, bs=64, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9765,,2.44,ResNet-18 tuning trial
+E020,2026-11-17,ResNet-18 (Proposed),"lr=0.001, bs=64, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9868,,2.43,ResNet-18 tuning trial
+E021,2026-11-17,ResNet-18 (Proposed),"lr=0.003, bs=32, wd=1e-05, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9567,,2.89,ResNet-18 tuning trial
+E022,2026-11-17,ResNet-18 (Proposed),"lr=0.0003, bs=32, wd=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9886,,2.87,ResNet-18 tuning trial
+E023,2026-11-17,ResNet-18 (Proposed),"lr=0.0003, bs=64, wd=1e-05, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9893,,2.39,ResNet-18 tuning trial
+E024,2026-11-17,ResNet-18 (Proposed),"lr=0.0003, bs=32, wd=1e-05, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9872,,2.87,ResNet-18 tuning trial
+E025,2026-11-17,Majority-Class Baseline,strategy=most_frequent,42,Dev 80/20 (seed 42) vs Geographic OOD,0.0239,0.0167,0.0,Seed 42 final eval
+E026,2026-11-17,PCA + Random Forest,"{'n_estimators': 400, 'max_depth': None, 'max_features': 'sqrt'}",42,Dev 80/20 (seed 42) vs Geographic OOD,0.7024,0.4349,0.12,Seed 42 final eval
+E027,2026-11-17,ResNet-18 (Proposed),"{'lr': 0.0003, 'batch_size': 64, 'weight_decay': 1e-05, 'epochs': 10}, epochs=15",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9905,0.8599,3.65,Seed 42 final eval
+E028,2026-11-17,Majority-Class Baseline,strategy=most_frequent,100,Dev 80/20 (seed 42) vs Geographic OOD,0.0239,0.0167,0.0,Seed 100 final eval
+E029,2026-11-17,PCA + Random Forest,"{'n_estimators': 400, 'max_depth': None, 'max_features': 'sqrt'}",100,Dev 80/20 (seed 42) vs Geographic OOD,0.6974,0.4362,0.12,Seed 100 final eval
+E030,2026-11-17,ResNet-18 (Proposed),"{'lr': 0.0003, 'batch_size': 64, 'weight_decay': 1e-05, 'epochs': 10}, epochs=15",100,Dev 80/20 (seed 42) vs Geographic OOD,0.9893,0.8506,3.67,Seed 100 final eval
+E031,2026-11-17,Majority-Class Baseline,strategy=most_frequent,2026,Dev 80/20 (seed 42) vs Geographic OOD,0.0239,0.0167,0.0,Seed 2026 final eval
+E032,2026-11-17,PCA + Random Forest,"{'n_estimators': 400, 'max_depth': None, 'max_features': 'sqrt'}",2026,Dev 80/20 (seed 42) vs Geographic OOD,0.6977,0.4397,0.12,Seed 2026 final eval
+E033,2026-11-17,ResNet-18 (Proposed),"{'lr': 0.0003, 'batch_size': 64, 'weight_decay': 1e-05, 'epochs': 10}, epochs=15",2026,Dev 80/20 (seed 42) vs Geographic OOD,0.9897,0.8515,3.64,Seed 2026 final eval
+E034,2026-11-17,Majority-Class Baseline,strategy=most_frequent,777,Dev 80/20 (seed 42) vs Geographic OOD,0.0239,0.0167,0.0,Seed 777 final eval
+E035,2026-11-17,PCA + Random Forest,"{'n_estimators': 400, 'max_depth': None, 'max_features': 'sqrt'}",777,Dev 80/20 (seed 42) vs Geographic OOD,0.6981,0.4402,0.12,Seed 777 final eval
+E036,2026-11-17,ResNet-18 (Proposed),"{'lr': 0.0003, 'batch_size': 64, 'weight_decay': 1e-05, 'epochs': 10}, epochs=15",777,Dev 80/20 (seed 42) vs Geographic OOD,0.9911,0.8554,3.63,Seed 777 final eval
+E037,2026-11-17,Majority-Class Baseline,strategy=most_frequent,999,Dev 80/20 (seed 42) vs Geographic OOD,0.0239,0.0167,0.0,Seed 999 final eval
+E038,2026-11-17,PCA + Random Forest,"{'n_estimators': 400, 'max_depth': None, 'max_features': 'sqrt'}",999,Dev 80/20 (seed 42) vs Geographic OOD,0.7029,0.4357,0.11,Seed 999 final eval
+E039,2026-11-17,ResNet-18 (Proposed),"{'lr': 0.0003, 'batch_size': 64, 'weight_decay': 1e-05, 'epochs': 10}, epochs=15",999,Dev 80/20 (seed 42) vs Geographic OOD,0.991,0.8633,3.64,Seed 999 final eval
+E040,2026-11-17,ResNet-18 (Sensitivity LR),"lr=0.0001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.985,,2.41,LR sensitivity
+E041,2026-11-17,ResNet-18 (Sensitivity LR),"lr=0.0003, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9854,,2.42,LR sensitivity
+E042,2026-11-17,ResNet-18 (Sensitivity LR),"lr=0.001, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9857,,2.4,LR sensitivity
+E043,2026-11-17,ResNet-18 (Sensitivity LR),"lr=0.003, epochs=10",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9722,,2.4,LR sensitivity
+E044,2026-11-17,Ablation: w/o Data Augmentation,"{'pretrained': True, 'augment': False, 'class_weighted': True, 'img_size': 64}",42,Dev 80/20 (seed 42) vs Geographic OOD,0.987,0.8586,3.32,Ablation study
+E045,2026-11-17,Ablation: w/o Class-Weighted Loss,"{'pretrained': True, 'augment': True, 'class_weighted': False, 'img_size': 64}",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9887,0.8533,3.76,Ablation study
+E046,2026-11-17,Ablation: w/o ImageNet Pretraining (Random Init),"{'pretrained': False, 'augment': True, 'class_weighted': True, 'img_size': 64}",42,Dev 80/20 (seed 42) vs Geographic OOD,0.9598,0.712,3.76,Ablation study
+E047,2026-11-17,Ablation: Downsampled Input (16x16 Resolution),"{'pretrained': True, 'augment': True, 'class_weighted': True, 'img_size': 16}",42,Dev 80/20 (seed 42) vs Geographic OOD,0.8988,0.6072,3.61,Ablation study
