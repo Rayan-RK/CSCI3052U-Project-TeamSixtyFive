@@ -116,36 +116,18 @@ Two things make the biggest difference in Table 4:
 ## 5. Preliminary Conclusions and Limitations
 
 ### 5.1 Preliminary Conclusions
-Our Milestone 5 experiments show that end-to-end convolutional representations transfer across European geographic regions far better than flattened color-and-PCA baselines. On the held-out Southern and Eastern European OOD test set ( = 6,231$), our fine-tuned ResNet-18 reaches a Macro-$ of **.8561 \pm 0.0054$** across 5 seeds—nearly doubling PCA + Random Forest (.4374 \pm 0.0024$) and cutting the relative generalization drop from Development Validation to Geographic OOD from **37.5%** down to **13.6%**.
+Our Milestone 5 experiments show that end-to-end convolutional representations transfer across European geographic regions far better than flattened color-and-PCA baselines. On the held-out Southern and Eastern European OOD test set ($N = 6,231$), our fine-tuned ResNet-18 reaches a Macro-$F_1$ of **$0.8561 \pm 0.0054$** across 5 seeds—nearly doubling PCA + Random Forest ($0.4374 \pm 0.0024$) and cutting the relative generalization drop from Development Validation to Geographic OOD from **37.5%** down to **13.6%**.
 
 Our ablation and sensitivity studies pinpoint why this works:
-* **Fine spatial texture matters most:** Downsampling ResNet-18's inputs from  \times 64$ to  \times 16$ (E047) drops OOD Macro-$ by **$-0.2527$**, showing that preserving 10 m structural details (road geometry, building footprints, crop row spacing) is critical when regional vegetation colors shift.
-* **Transfer learning prevents regional overfitting:** Removing ImageNet pretraining (E046) drops OOD Macro-$ by **$-0.1479$** even though validation Macro-$ stays high (.9598$).
-* **True interior generalization:** Re-evaluating after removing OOD images within , 5,$ and \text{ km}$ of national borders leaves Macro-$ virtually unchanged (.8599 \rightarrow 0.8635$), confirming that performance is not inflated by border-adjacent spatial leakage.
+- **Fine spatial texture matters most:** Downsampling ResNet-18's inputs from $64 \times 64$ to $16 \times 16$ (`E047`) drops OOD Macro-$F_1$ by **$-0.2527$**, showing that preserving 10 m structural details (road geometry, building footprints, crop row spacing) is critical when regional vegetation colors shift.
+- **Transfer learning prevents regional overfitting:** Removing ImageNet pretraining (`E046`) drops OOD Macro-$F_1$ by **$-0.1479$** even though validation Macro-$F_1$ stays high ($0.9598$).
+- **True interior generalization:** Re-evaluating after removing OOD images within $2, 5,$ and $10\text{ km}$ of national borders leaves Macro-$F_1$ virtually unchanged ($0.8599 \rightarrow 0.8635$), confirming that performance is not inflated by border-adjacent spatial leakage.
 
 ### 5.2 Limitations and Future Work
-1. **Severe OOD Class Scarcity (Pasture):** Because EuroSAT was not sampled uniformly across countries, Pasture has only  = 54$ examples in the Southern/Eastern European OOD split and suffers a **$-0.4575$** $ drop (.5263$ OOD $). Expanding evaluation to larger multi-country benchmarks (such as BigEarthNet) would stabilize per-class estimates.
-2. **Climate-Driven Spectral Ambiguity:** High-confidence errors cluster in Mediterranean countries (Spain, Greece, Italy, Cyprus), where dry scrubland (HerbaceousVegetation), spaced orchards (PermanentCrop), and seasonal dry riverbeds (River) share exposed soil reflectance. Incorporating Sentinel-2 multispectral bands (e.g., Red-Edge, SWIR, and NDVI indices) alongside RGB should help separate vegetation moisture and crop types.
-3. **Sensitivity to Sensor Noise and Calibration:** While ResNet-18 handles global brightness/contrast shifts reasonably well (.6661$ OOD Macro-$), additive Gaussian pixel noise ($\sigma = 0.08$) drops OOD Macro-$ to .4885$. Adding radiometric noise and color-jitter augmentations during training is a straightforward next step.
-4. **Excluded NoData Patches:** The 3,189 EuroSAT patches lacking valid coordinate metadata were excluded to keep the geographic boundary split strictly leak-free, reducing total usable sample count by .8\%$.
-
----
-
-## 5. Preliminary Conclusions and Limitations
-
-### 5.1 Preliminary Conclusions
-Our Milestone 5 experiments show that end-to-end convolutional representations transfer across European geographic regions far better than flattened color-and-PCA baselines. On the held-out Southern and Eastern European OOD test set ( = 6,231$), our fine-tuned ResNet-18 reaches a Macro-$ of **.8561 \pm 0.0054$** across 5 seeds—nearly doubling PCA + Random Forest (.4374 \pm 0.0024$) and cutting the relative generalization drop from Development Validation to Geographic OOD from **37.5%** down to **13.6%**.
-
-Our ablation and sensitivity studies pinpoint why this works:
-* **Fine spatial texture matters most:** Downsampling ResNet-18's inputs from  \times 64$ to  \times 16$ (E047) drops OOD Macro-$ by **$-0.2527$**, showing that preserving 10 m structural details (road geometry, building footprints, crop row spacing) is critical when regional vegetation colors shift.
-* **Transfer learning prevents regional overfitting:** Removing ImageNet pretraining (E046) drops OOD Macro-$ by **$-0.1479$** even though validation Macro-$ stays high (.9598$).
-* **True interior generalization:** Re-evaluating after removing OOD images within , 5,$ and \text{ km}$ of national borders leaves Macro-$ virtually unchanged (.8599 \rightarrow 0.8635$), confirming that performance is not inflated by border-adjacent spatial leakage.
-
-### 5.2 Limitations and Future Work
-1. **Severe OOD Class Scarcity (Pasture):** Because EuroSAT was not sampled uniformly across countries, Pasture has only  = 54$ examples in the Southern/Eastern European OOD split and suffers a **$-0.4575$** $ drop (.5263$ OOD $). Expanding evaluation to larger multi-country benchmarks (such as BigEarthNet) would stabilize per-class estimates.
-2. **Climate-Driven Spectral Ambiguity:** High-confidence errors cluster in Mediterranean countries (Spain, Greece, Italy, Cyprus), where dry scrubland (HerbaceousVegetation), spaced orchards (PermanentCrop), and seasonal dry riverbeds (River) share exposed soil reflectance. Incorporating Sentinel-2 multispectral bands (e.g., Red-Edge, SWIR, and NDVI indices) alongside RGB should help separate vegetation moisture and crop types.
-3. **Sensitivity to Sensor Noise and Calibration:** While ResNet-18 handles global brightness/contrast shifts reasonably well (.6661$ OOD Macro-$), additive Gaussian pixel noise ($\sigma = 0.08$) drops OOD Macro-$ to .4885$. Adding radiometric noise and color-jitter augmentations during training is a straightforward next step.
-4. **Excluded NoData Patches:** The 3,189 EuroSAT patches lacking valid coordinate metadata were excluded to keep the geographic boundary split strictly leak-free, reducing total usable sample count by .8\%$.
+1. **Severe OOD Class Scarcity (`Pasture`):** Because EuroSAT was not sampled uniformly across countries, `Pasture` has only $n = 54$ examples in the Southern/Eastern European OOD split and suffers a **$-0.4575$** $F_1$ drop ($0.5263$ OOD $F_1$). Expanding evaluation to larger multi-country benchmarks (such as BigEarthNet) would stabilize per-class estimates.
+2. **Climate-Driven Spectral Ambiguity:** High-confidence errors cluster in Mediterranean countries (Spain, Greece, Italy, Cyprus), where dry scrubland (`HerbaceousVegetation`), spaced orchards (`PermanentCrop`), and seasonal dry riverbeds (`River`) share exposed soil reflectance. Incorporating Sentinel-2 multispectral bands (e.g., Red-Edge, SWIR, and NDVI indices) alongside RGB should help separate vegetation moisture and crop types.
+3. **Sensitivity to Sensor Noise and Calibration:** While ResNet-18 handles global brightness/contrast shifts reasonably well ($0.6661$ OOD Macro-$F_1$), additive Gaussian pixel noise ($\sigma = 0.08$) drops OOD Macro-$F_1$ to $0.4885$. Adding radiometric noise and color-jitter augmentations during training is a straightforward next step.
+4. **Excluded `NoData` Patches:** The 3,189 EuroSAT patches lacking valid coordinate metadata were excluded to keep the geographic boundary split strictly leak-free, reducing total usable sample count by $11.8\%$.
 
 ---
 
@@ -213,5 +195,3 @@ All code, CSV outputs, figures, and metadata are organized in our repository:
 - **Error, Sensitivity, Robustness & Ablation Data:** `outputs/m5_per_class_f1.csv`, `outputs/m5_error_analysis_samples.csv`, `outputs/m5_border_buffer_sensitivity.csv`, `outputs/m5_robustness.csv`, `outputs/m5_ablation.csv`
 - **Figures:** `outputs/m5_fig1_model_comparison_ci.png`, `outputs/m5_confusion_matrices.png`, `outputs/m5_fig2_lr_sensitivity.png`
 - **Run Log & Environment:** `outputs/m5_experiment_log.csv`, `outputs/m5_environment_meta.json`
-
-
