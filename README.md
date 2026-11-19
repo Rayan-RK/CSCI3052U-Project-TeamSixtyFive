@@ -5,13 +5,13 @@
 
 ## Project Overview
 
-This project investigates how geographic domain shift affects satellite image classification using the EuroSAT Sentinel-2 dataset. We train models exclusively on scenes from Northern, Western, and Central Europe (**Development**, $N = 17,580$) and evaluate them on a geographically separated **Out-of-Distribution (OOD) Test** set ($N = 6,231$) covering Southern and Eastern Europe.
+This project investigates how geographic domain shift affects satellite image classification using the EuroSAT Sentinel-2 dataset. We train models exclusively on scenes from Western and Central Europe (**Development**, $N = 17,580$) and evaluate them on a geographically separated **Out-of-Distribution (OOD) Test** set ($N = 6,231$) covering Southern and Eastern Europe.
 
 Our primary evaluation metric is **Macro-F1**, which gives equal weight to each land-cover class despite regional class-frequency shifts.
 
 ## Dataset
 
-We use the official EuroSAT v2 dataset, containing 27,000 RGB images across 10 land-cover classes (3,189 patches without valid coordinates are excluded during geographic partitioning).
+We use the official EuroSAT v2 dataset, containing 27,000 RGB images across 10 land-cover classes (3,189 patches are excluded during geographic partitioning: 2,074 outside the selected regions and 1,115 unresolved country assignments).
 
 - Official dataset: https://zenodo.org/records/7711810
 - RGB images: `data/EuroSAT_RGB/EuroSAT_RGB/`

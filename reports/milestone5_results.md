@@ -8,7 +8,7 @@
 ## 4. Experimental Results
 
 ### 4.1 Evaluation Setup and Baselines
-To test if a model trained on satellite imagery from one part of Europe still works on unseen regions without spatial leakage, we held out all Southern and Eastern European images as our **Geographic OOD Test** set ($N = 6,231$). All training and model selection was done strictly on the **Development** set ($N = 17,580$ images from Northern, Western, and Central Europe). We used an 80/20 stratified split (`seed = 42`) to divide the Development set into **Development Train** ($n = 14,064$) and **Development Validation** ($n = 3,516$), and dropped the 3,189 patches that had `NoData` coordinates before splitting. Since class frequencies change a lot across regions—for example, `Pasture` only has $n = 54$ images in the OOD Test set while `HerbaceousVegetation` has $n = 1,414$—we report **Macro-$F_1$** as our main metric along with overall accuracy.
+To test if a model trained on satellite imagery from one part of Europe still works on unseen regions without spatial leakage, we held out all Southern and Eastern European images as our **Geographic OOD Test** set ($N = 6,231$). All training and model selection was done strictly on the **Development** set ($N = 17,580$ images from Western and Central Europe). We used an 80/20 stratified split (`seed = 42`) to divide the Development set into **Development Train** ($n = 14,064$) and **Development Validation** ($n = 3,516$), and excluded 2,074 patches outside the selected regions and 1,115 patches with unresolved country assignments before splitting. Since class frequencies change a lot across regions—for example, `Pasture` only has $n = 54$ images in the OOD Test set while `HerbaceousVegetation` has $n = 1,414$—we report **Macro-$F_1$** as our main metric along with overall accuracy.
 
 We tested three models on these exact same splits:
 1. **Majority-Class Baseline:** Always predicts the most common class in the training set (`DummyClassifier(strategy="most_frequent")`) to give us a floor for comparison.
@@ -49,7 +49,7 @@ A couple of clear findings come out of Table 2:
 ### 4.4 Uncertainty and Statistical Significance
 To verify that these improvements were consistent across seeds and test samples (`outputs/m5_uncertainty_stats.json`), we ran three checks:
 - **Consistent scores across seeds:** Across all 5 seeds, ResNet-18's OOD Macro-$F_1$ stays between $0.8506$ and $0.8633$ ($\text{SD} = 0.0054$), giving a tight 95% confidence interval of **$[0.8494, 0.8629]$**.
-- **Wilcoxon Signed-Rank Test:** ResNet-18 beats both PCA + Random Forest and the Majority-Class baseline on all 5 seeds ($5/5$ runs), giving $W = 15$ and $p = 0.0625$ (the lowest two-sided exact $p$-value possible for $n = 5$ paired samples).
+- **Wilcoxon Signed-Rank Test:** ResNet-18 beats both PCA + Random Forest and the Majority-Class baseline on all 5 seeds ($5/5$ runs), giving $W = 15$ and $p = 0.0625$ (the lowest two-sided exact $p$-value possible for $n = 5$ paired samples). This result is not statistically significant at the 0.05 level, despite ResNet-18 outperforming both baselines in all five runs.
 - **Bootstrap CI on OOD Test:** Resampling the $N = 6,231$ OOD test predictions 1,000 times with replacement (`seed = 42`, `Run ID E027`, point score $0.8599$) gives a 95% bootstrap confidence interval of **$[0.8470, 0.8724]$**.
 
 ---
@@ -88,10 +88,10 @@ We pulled the 50 highest-confidence mistakes on the OOD test set (`outputs/m5_er
 #### **Perturbation Robustness (`outputs/m5_robustness.csv`)**
 To simulate sensor noise and lighting differences across latitudes, we evaluated both `seed = 42` models on modified versions of the OOD test images:
 - **Clean OOD:** PCA + Random Forest = **0.4349** | ResNet-18 = **0.8599**
-- **Gaussian Noise ($\sigma = 0.08$):** PCA + Random Forest = **0.2979** ($-0.1370$) | ResNet-18 = **0.4885** ($-0.3714$)
+- **Gaussian Noise (different perturbation scales):** PCA + Random Forest = **0.2979** ($-0.1370$) | ResNet-18 = **0.4885** ($-0.3714$)
 - **Brightness/Contrast Shift ($+35\%$ brightness, $+25\%$ contrast):** PCA + Random Forest = **0.1390** ($-0.2959$) | ResNet-18 = **0.6661** ($-0.1938$)
 
-Under strong brightness and contrast shifts, PCA + Random Forest falls apart ($0.1390$), whereas ResNet-18 still holds **0.6661** Macro-$F_1$. Both models take a big hit from additive pixel noise, which suggests adding random noise augmentation during training would help in future work.
+Under strong brightness and contrast shifts, PCA + Random Forest falls apart ($0.1390$), whereas ResNet-18 still holds **0.6661** Macro-$F_1$. Both models take a big hit from additive pixel noise, which suggests adding random noise augmentation during training would help in future work. **Comparison limitation:** Random Forest received Gaussian noise with standard deviation 0.08 on RGB values in [0, 1] after resizing to 16×16. ResNet-18 received noise with standard deviation 0.15 after ImageNet normalization at 64×64. These conditions are not equivalent, so the noise scores should not be used to rank the models' relative robustness.
 
 #### **Ablation Study (`outputs/m5_ablation.csv`)**
 To see which parts of our ResNet-18 setup actually matter for OOD generalization (`seed = 42`), we removed four pieces one at a time while keeping everything else fixed:
@@ -108,7 +108,7 @@ To see which parts of our ResNet-18 setup actually matter for OOD generalization
 
 Two things make the biggest difference in Table 4:
 1. **Keeping the full $64 \times 64$ resolution ($-0.2527$ when downsampled to $16 \times 16$):** Shrinking the images down to the $16 \times 16$ size used by the Random Forest drops OOD Macro-$F_1$ from $0.8599$ to $0.6072$. Fine spatial textures—like road edges, building layouts, and crop rows—matter much more across regions than blurry color averages.
-2. **ImageNet pretraining ($-0.1479$ without it):** Training ResNet-18 from scratch (`E046`) still gets $0.9598$ on validation, but drops to $0.7120$ on OOD Test. Starting from pretrained weights keeps the network from overfitting to Northern and Central European color palettes.
+2. **ImageNet pretraining ($-0.1479$ without it):** Training ResNet-18 from scratch (`E046`) still gets $0.9598$ on validation, but drops to $0.7120$ on OOD Test. Starting from pretrained weights keeps the network from overfitting to Western and Central European color palettes.
 3. **Class weighting and augmentations ($-0.0066$ and $-0.0013$):** Class-weighted loss helps protect recall on rarer OOD classes, and random flips/rotations give a small extra boost.
 
 ---
@@ -126,8 +126,8 @@ Our ablation and sensitivity studies pinpoint why this works:
 ### 5.2 Limitations and Future Work
 1. **Severe OOD Class Scarcity (`Pasture`):** Because EuroSAT was not sampled uniformly across countries, `Pasture` has only $n = 54$ examples in the Southern/Eastern European OOD split and suffers a **$-0.4575$** $F_1$ drop ($0.5263$ OOD $F_1$). Expanding evaluation to larger multi-country benchmarks (such as BigEarthNet) would stabilize per-class estimates.
 2. **Climate-Driven Spectral Ambiguity:** High-confidence errors cluster in Mediterranean countries (Spain, Greece, Italy, Cyprus), where dry scrubland (`HerbaceousVegetation`), spaced orchards (`PermanentCrop`), and seasonal dry riverbeds (`River`) share exposed soil reflectance. Incorporating Sentinel-2 multispectral bands (e.g., Red-Edge, SWIR, and NDVI indices) alongside RGB should help separate vegetation moisture and crop types.
-3. **Sensitivity to Sensor Noise and Calibration:** While ResNet-18 handles global brightness/contrast shifts reasonably well ($0.6661$ OOD Macro-$F_1$), additive Gaussian pixel noise ($\sigma = 0.08$) drops OOD Macro-$F_1$ to $0.4885$. Adding radiometric noise and color-jitter augmentations during training is a straightforward next step.
-4. **Excluded `NoData` Patches:** The 3,189 EuroSAT patches lacking valid coordinate metadata were excluded to keep the geographic boundary split strictly leak-free, reducing total usable sample count by $11.8\%$.
+3. **Sensitivity to Sensor Noise and Calibration:** While ResNet-18 handles global brightness/contrast shifts reasonably well ($0.6661$ OOD Macro-$F_1$), Gaussian noise applied after ImageNet normalization ($\sigma = 0.15$) drops ResNet-18 OOD Macro-$F_1$ to $0.4885$. Adding radiometric noise and color-jitter augmentations during training is a straightforward next step.
+4. **Excluded Geographic Assignments:** We excluded 2,074 patches outside the selected regions and 1,115 with unresolved country assignments to maintain the defined geographic split, reducing total usable sample count by $11.8\%$.
 
 ---
 
